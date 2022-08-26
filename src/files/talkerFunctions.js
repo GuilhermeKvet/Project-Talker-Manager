@@ -13,6 +13,13 @@ const readFile = async () => {
   }
 };
 
+const getTalkerById = async (id) => {
+  const talkers = await readFile();
+  const response = talkers.filter((talker) => talker.id === id);
+  return response[0];
+};
+
 module.exports = {
   readFile,
+  getTalkerById,
 };
