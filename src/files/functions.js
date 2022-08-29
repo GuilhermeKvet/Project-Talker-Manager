@@ -65,6 +65,21 @@ const updateTalk = async (id, update) => {
   }
 };
 
+const deleteTalk = async (id) => {
+  try {
+    const talkers = await readFile();
+    const talkerDelete = talkers.find((talker) => talker.id === id);
+    if (talkerDelete) {
+      const index = talkers.indexOf(talkerDelete);
+      talkers.splice(index, 1);
+      await insertTalk(talkers);
+    }
+  } catch (error) {
+    console.error('Erro ao abrir o arquivo', error.message);
+    return error;
+  }
+};
+
 module.exports = {
   readFile,
   getTalkerById,
@@ -72,4 +87,5 @@ module.exports = {
   setToken,
   insertTalk,
   updateTalk,
+  deleteTalk,
 };

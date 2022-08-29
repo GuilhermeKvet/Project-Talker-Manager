@@ -1,5 +1,10 @@
 const express = require('express');
-const { readFile, getTalkerById, insertTalk, updateTalk } = require('../files/functions');
+const {
+  readFile,
+  getTalkerById,
+  insertTalk,
+  updateTalk,
+  deleteTalk } = require('../files/functions');
 const validateToken = require('../middleware/validateToken');
 const {
   validateName,
@@ -56,5 +61,11 @@ router.put('/:id',
     const updateTalker = await updateTalk(Number(id), talker);
     return res.status(200).json(updateTalker);
   });
+
+router.delete('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  await deleteTalk(Number(id));
+  res.sendStatus(204);
+});
 
 module.exports = router;
