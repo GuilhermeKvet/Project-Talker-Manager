@@ -1,5 +1,5 @@
 const express = require('express');
-const { readFile, getTalkerById, insertTalk } = require('../files/functions');
+const { readFile, getTalkerById, insertTalk, updateTalk } = require('../files/functions');
 const validateToken = require('../middleware/validateToken');
 const {
   validateName,
@@ -39,8 +39,22 @@ router.post('/',
   const newTalker = req.body;
   const talkers = await readFile();
   newTalker.id = Number(talkers[talkers.length - 1].id) + 1;
-  await insertTalk(newTalker);
+  await insertTalk([...talkers, newTalker]);
   return res.status(201).json(newTalker);
 });
+
+router.put('/:id',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+  async (req, res) => {
+    const { id } = req.params;
+    const talker = req.body;
+    const updateTalker = await updateTalk(Number(id), talker);
+    return res.status(200).json(updateTalker);
+  });
 
 module.exports = router;

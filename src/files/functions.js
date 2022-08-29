@@ -38,14 +38,31 @@ const getToken = async () => {
   }
 };
 
-const insertTalk = async (talk) => {
+const insertTalk = async (talkers) => {
   try {
-    const talkers = await readFile();
-    await fs.writeFile(path, JSON.stringify([...talkers, talk]));
-} catch (error) {
+    await fs.writeFile(path, JSON.stringify(talkers));
+  } catch (error) {
     console.error('Erro ao abrir o arquivo', error.message);
     return error;
-}
+  }
+};
+
+const updateTalk = async (id, update) => {
+  try {
+    const talkers = await readFile();
+    const newTalker = talkers.find((talker) => talker.id === id);
+    if (newTalker) {
+      const newTalkers = talkers.map((talker) => {
+        if (talker.id === id) return { ...talker, ...update };
+        return talker;
+      });
+    await insertTalk(newTalkers);
+    return { ...newTalker, ...update };
+    }
+  } catch (error) {
+    console.error('Erro ao abrir o arquivo', error.message);
+    return error;
+  }
 };
 
 module.exports = {
@@ -54,4 +71,5 @@ module.exports = {
   getToken,
   setToken,
   insertTalk,
+  updateTalk,
 };
