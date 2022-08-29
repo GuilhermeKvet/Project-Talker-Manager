@@ -4,7 +4,8 @@ const {
   getTalkerById,
   insertTalk,
   updateTalk,
-  deleteTalk } = require('../files/functions');
+  deleteTalk,
+  findTalkerByName } = require('../files/functions');
 const validateToken = require('../middleware/validateToken');
 const {
   validateName,
@@ -22,6 +23,16 @@ router.get('/', async (req, res) => {
     return res.status(200).json(talkers);
   }
   return res.status(200).json([]);
+});
+
+router.get('/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const response = await findTalkerByName(q);
+  if (response) {
+    res.status(200).json(response);
+  } else {
+    res.status(200).json([]);
+  }
 });
 
 router.get('/:id', async (req, res) => {
@@ -60,7 +71,7 @@ router.put('/:id',
     const talker = req.body;
     const updateTalker = await updateTalk(Number(id), talker);
     return res.status(200).json(updateTalker);
-  });
+});
 
 router.delete('/:id', validateToken, async (req, res) => {
   const { id } = req.params;

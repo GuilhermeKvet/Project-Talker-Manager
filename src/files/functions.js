@@ -80,6 +80,12 @@ const deleteTalk = async (id) => {
   }
 };
 
+const findTalkerByName = async (q) => {
+  const talkers = await readFile();
+  if (!q) return talkers;
+  return talkers.filter((talker) => talker.name.toLowerCase().includes(q.toLowerCase()));
+};
+
 module.exports = {
   readFile,
   getTalkerById,
@@ -88,4 +94,5 @@ module.exports = {
   insertTalk,
   updateTalk,
   deleteTalk,
+  findTalkerByName,
 };
